@@ -7,6 +7,7 @@ from fastapi import BackgroundTasks, FastAPI, status
 
 from gemini_service import get_decision
 from models import IncidentPayload
+from servicenow_service import add_customer_comment, add_work_note, resolve_incident
 
 
 logging.basicConfig(level=logging.INFO)
@@ -20,14 +21,23 @@ processed_incident_ids: set[str] = set()
 
 
 async def triage_incident(payload: IncidentPayload) -> None:
-    """Get and log the Gemini triage decision after the webhook response."""
-    decision = await get_decision(payload.short_description, payload.description)
+    """Triage an incident and write the resulting action back to ServiceNow."""
+    result = await get_decision(payload.short_description, payload.description)
     logger.info(
         "Gemini decision for incident %s (%s): %s",
         payload.number,
         payload.incident_sys_id,
-        decision,
+        result,
     )
+
+    decision = result["decision"]
+    message = result["message"]
+    if decision == "respond":
+        await resolve_incident(payload.incident_sys_id, message)
+    elif decision == "ask":
+        await add_customer_comment(payload.incident_sys_id, message)
+    elif decision == "escalate":
+        await add_work_note(payload.incident_sys_id, message)
 
 
 @app.post("/webhook", status_code=status.HTTP_202_ACCEPTED)
