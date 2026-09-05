@@ -4,6 +4,10 @@ This FastAPI service receives new ServiceNow incidents and asks Gemini whether
 to resolve them, ask the customer for more information, or escalate them. It
 writes the resulting message back to the same incident.
 
+## Demo Video
+
+[Watch the demo video](https://drive.google.com/file/d/1aYW4mKz6hJeUvDAuPu6ftOSGVe4FW9Sk/view?usp=sharing)
+
 ## Setup
 
 Clone the repository and open it:
@@ -124,3 +128,35 @@ All three cases should report `PASS`.
 This test changes the selected PDI incident; use a non-production test record.
 For the `respond` branch, this PDI uses `Solution provided` as the valid
 `close_code` value.
+
+## Screenshots
+
+### Business Rule Setup
+
+![Business Rule configuration](<screenshots/01_business rule config.png>)
+
+![Business Rule script](<screenshots/02_business rule script.png>)
+
+### Respond, Before and After
+
+![Respond before](<screenshots/03_respond before.png>)
+
+![Respond after](<screenshots/04_responed after.png>)
+
+![Respond after notes](<screenshots/05_responed notes.png>)
+
+### Ask, Before and After
+
+![Ask before](<screenshots/06_ask before.png>)
+
+![Ask after](<screenshots/07_ask after.png>)
+
+![Ask after notes](<screenshots/08_ask after notes.png>)
+
+### Escalate, Before and After
+
+![Escalate before](<screenshots/09_ escalate before.png>)
+
+![Escalate after](<screenshots/10_ escalate after.png>)
+
+![Escalate after notes](<screenshots/11_ escalate after notes.png>)
